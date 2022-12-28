@@ -11,13 +11,14 @@ app.get('/', (req, res) => {
   res.redirect(`/${uuidv4()}`)
 })
 
-app.get('/:roomId', (req, res) => {
-  res.render('room', { roomId: req.params.roomId })
+app.get('/:room', (req, res) => {
+  res.render('room', { roomId: req.params.room })
 })
 
 io.on('connection', socket => {
-  socket.on('join-room', () => {
-    console.log("joined room")
+  socket.on('join-room', (roomId) => { 
+    socket.join(roomId)
+    socket.to(roomId).emit('user-connected') // 有其他人加入房間時，讓房間裡的其他人看到，拿掉broadcast
   })
 })
 

@@ -14,7 +14,14 @@ navigator.mediaDevices.getUserMedia({
     addVideoStream(myVideo, stream)
   })
 
-socket.emit('join-room')
+socket.emit('join-room', ROOM_ID) // 從room.ejs header裡面來的ROOM_ID
+socket.on('user-connected', () => {
+  connecToNewUser()
+})
+
+const connecToNewUser = () => {
+  console.log('new user')
+}
 
 
 const addVideoStream = (video, stream) => {

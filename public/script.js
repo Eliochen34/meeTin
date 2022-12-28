@@ -3,6 +3,11 @@ const videoGrid = document.getElementById('video-grid')
 const myVideo = document.createElement('video')
 myVideo.muted = true
 
+const peer = new Peer(undefined, {
+  path: '/peerjs',
+  host: '/',
+  port: '3000'
+})
 
 let myVideoStream
 navigator.mediaDevices.getUserMedia({
@@ -12,15 +17,32 @@ navigator.mediaDevices.getUserMedia({
   .then(stream => {
     myVideoStream = stream
     addVideoStream(myVideo, stream)
+
+    peer.on('call', call => {
+      call.answer(stream)
+      const video = document.createElement('video')
+      call.on('stream', userVideoStream => {
+        addVideoStream(video, userVideoStream)
+      })
+    })
+    
+    socket.on('user-connected', (userId) => {
+      connecToNewUser(userId, stream)
+    })
   })
 
-socket.emit('join-room', ROOM_ID) // 從room.ejs header裡面來的ROOM_ID
-socket.on('user-connected', () => {
-  connecToNewUser()
+
+peer.on('open', id => {
+  socket.emit('join-room', ROOM_ID, id) // 從room.ejs header裡面來的ROOM_ID以及進入的使用者的ID
 })
 
-const connecToNewUser = () => {
-  console.log('new user')
+const connecToNewUser = (userId, stream) => {
+  console.log(userId)
+  const call = peer.call(userId, stream) // 呼叫他人id，提供自己的stream
+  const video = document.createElement('video') // 創建一個元素
+  call.on('stream', userVideoStream => {
+    addVideoStream(video, userVideoStream)
+  })
 }
 
 

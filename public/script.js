@@ -36,12 +36,6 @@ myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)
 })
 
-// socket.emit('join-room', ROOM_ID, 10)
-
-// socket.on('user-connected', userId => { // 想像user-connected是一個event
-//   console.log('user connected:' + userId)
-// })
-
 
 const connectToNewUser = (userId, stream) => {
   const call = myPeer.call(userId, stream) // 呼叫他人的userId，給他我們的影像stream
@@ -62,3 +56,15 @@ const addVideoStream = (video, stream) => { // video參數為要撥放的區塊�
   })
   videoGrid.append(video) // 將串流影像放入videoGrid中
 }
+
+// console.log(req.body)
+
+// const input = document.querySelector('input')
+
+// input.keydown(e => {
+//   if(e.which == 13 && text.val().length !== 0) {
+//     console.log(text.val())
+//     socket.emit('message', text.val())
+//     text.val('')
+//   }
+// })

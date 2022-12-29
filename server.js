@@ -1,10 +1,16 @@
 const express = require('express')
+const handlebars = require('express-handlebars')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidv4 } = require('uuid')
 
-app.set('view engine', 'ejs')
+
+app.engine('hbs', handlebars({ extname: '.hbs' }))
+
+app.set('view engine', 'hbs')
+
+// app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {

@@ -34,6 +34,8 @@ socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close() // 當user離開房間時將userId這個連線馬上關掉
 })
 
+socket.on('createMessage', )
+
 
 myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)

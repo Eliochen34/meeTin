@@ -8,6 +8,9 @@ const myVideo = document.createElement('video')
 myVideo.muted = true
 const peers = {}
 
+const messageInput = document.getElementById('chat_message')
+
+
 navigator.mediaDevices.getUserMedia({ // 取得影像做為stream傳入下一個then
   video: true,
   audio: true

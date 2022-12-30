@@ -4,6 +4,7 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidv4 } = require('uuid')
+const { pages } = require('./routes')
 
 
 app.engine('hbs', handlebars({ extname: '.hbs' }))
@@ -13,13 +14,6 @@ app.set('view engine', 'hbs')
 // app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
-app.get('/', (req, res) => {
-  res.redirect(`/${uuidv4()}`)
-})
-
-app.get('/:room', (req, res) => {
-  res.render('room', { roomId: req.params.room })
-})
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => { // 有其他人加入房間時，傳入roomId和userId
@@ -31,4 +25,8 @@ io.on('connection', socket => {
   })
 })
 
+app.use(pages)
+
 server.listen(3000)
+
+module.exports = app

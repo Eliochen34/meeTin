@@ -11,6 +11,10 @@ const peers = {}
 const messageForm = document.getElementById('main__message__container')
 const messageShow = document.getElementById('messages')
 const messageInput = document.getElementById('message-input')
+const userName = prompt('What is your name?')
+
+
+// appendMessage('You joined')
 
 navigator.mediaDevices.getUserMedia({ // 取得影像做為stream傳入下一個then
   video: true,
@@ -26,17 +30,21 @@ navigator.mediaDevices.getUserMedia({ // 取得影像做為stream傳入下一個
     })
   }) 
 
-  socket.on('user-connected', userId => { // 允許自己的影像其他人看的到
+  socket.on('user-connected', (userId, userName) => { // 允許自己的影像其他人看的到
     connectToNewUser(userId, stream) // 將自己的串流影像給別人
+    appendMessage(`${userName} is joined.`)
   })
 })
 
-socket.on('user-disconnected', userId => {
+socket.on('user-disconnected', (name, userId) => {
+  appendMessage(`${name} is disconnected.`)
+  console.log(peers)
   if (peers[userId]) peers[userId].close() // 當user離開房間時將userId這個連線馬上關掉
 })
 
+
 socket.on('chat-message', data => {
-  appendMessage(data)
+  appendMessage(`${data.name}: ${data.message}`)
 })
 
 messageForm.addEventListener('submit', e => {
@@ -48,7 +56,7 @@ messageForm.addEventListener('submit', e => {
 
 
 myPeer.on('open', id => {
-  socket.emit('join-room', ROOM_ID, id)
+  socket.emit('join-room', ROOM_ID, id, userName)
 })
 
 

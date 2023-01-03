@@ -5,7 +5,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidv4 } = require('uuid')
 const { pages } = require('./routes')
-
+const users = {}
 
 app.engine('hbs', handlebars({ extname: '.hbs' }))
 
@@ -17,13 +17,18 @@ app.use(express.static('public'))
 
 
 io.on('connection', socket => {
-  socket.on('join-room', (roomId, userId) => { // 有其他人加入房間時，傳入roomId和userId
+  socket.on('join-room', (roomId, userId, userName) => { // 有其他人加入房間時，傳入roomId和userId
     socket.join(roomId)
-    socket.to(roomId).emit('user-connected', userId) // 當有人進來時廣播該使用者userId
+    users[socket.id] = userName
+    console.log(users)
+    socket.to(roomId).emit('user-connected', userId, userName) // 當有人進來時廣播該使用者userId
     // socket.to(roomId).emit('chat-message', 'hello')
 
     socket.on('send-chat-message', message => {
-      io.to(roomId).emit('chat-message', message) // 使用socket是給其他人，使用io是給所有人，連自己也會看到
+      io.to(roomId).emit('chat-message', {
+        message: message,
+        name: users[socket.id]
+      }) // 使用socket是給其他人，使用io是給所有人，連自己也會看到
     })
 
     // 以下用來比較
@@ -31,7 +36,8 @@ io.on('connection', socket => {
     //   io.to(roomId).emit('createMessage', message)
     // })
     socket.on('disconnect', () => { // 當有人離開房間時
-      socket.to(roomId).emit('user-disconnected', userId)
+      socket.to(roomId).emit('user-disconnected', users[socket.id], userId)
+      delete users[socket.id]
     })
   })
 })

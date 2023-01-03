@@ -8,8 +8,9 @@ const myVideo = document.createElement('video')
 myVideo.muted = true
 const peers = {}
 
-const messageInput = document.getElementById('chat_message')
-
+const messageForm = document.getElementById('main__message__container')
+const messageShow = document.getElementById('messages')
+const messageInput = document.getElementById('message-input')
 
 navigator.mediaDevices.getUserMedia({ // 取得影像做為stream傳入下一個then
   video: true,
@@ -34,7 +35,16 @@ socket.on('user-disconnected', userId => {
   if (peers[userId]) peers[userId].close() // 當user離開房間時將userId這個連線馬上關掉
 })
 
-socket.on('createMessage', )
+socket.on('chat-message', data => {
+  appendMessage(data)
+})
+
+messageForm.addEventListener('submit', e => {
+  e.preventDefault()
+  const message = messageInput.value
+  socket.emit('send-chat-message', message)
+  messageInput.value = ''
+})
 
 
 myPeer.on('open', id => {
@@ -62,14 +72,8 @@ const addVideoStream = (video, stream) => { // video參數為要撥放的區塊�
   videoGrid.append(video) // 將串流影像放入videoGrid中
 }
 
-// console.log(req.body)
-
-// const input = document.querySelector('input')
-
-// input.keydown(e => {
-//   if(e.which == 13 && text.val().length !== 0) {
-//     console.log(text.val())
-//     socket.emit('message', text.val())
-//     text.val('')
-//   }
-// })
+const appendMessage = (message) => {
+  const messageElement = document.createElement('div')
+  messageElement.innerText = message
+  messageShow.append(messageElement)
+}

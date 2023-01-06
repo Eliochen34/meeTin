@@ -6,6 +6,16 @@ const io = require('socket.io')(server)
 const { v4: uuidv4 } = require('uuid')
 const { pages } = require('./routes')
 const users = {}
+const port = process.env.PORT || 3000
+const https = require('https')
+const fs = require('fs')
+const options = {
+  key: fs.readFileSync('../../etc/ssl/private.key'),
+  cert: fs.readFileSync('../../etc/ssl/certificate.crt')
+}
+
+https.createServer(options).listen(443)
+
 
 app.engine('hbs', handlebars({ extname: '.hbs' }))
 
@@ -44,6 +54,6 @@ io.on('connection', socket => {
 
 app.use(pages)
 
-server.listen(3000)
+server.listen(port)
 
 module.exports = app

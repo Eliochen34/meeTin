@@ -7,6 +7,9 @@ const roomController = {
   },
   getIntoRoom: (req, res, next) => {
     res.render('room', { roomId: req.params.room })
+  },
+  getRooms: (req, res) => {
+    res.render('rooms')
   } 
 }
 

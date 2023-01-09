@@ -54,6 +54,6 @@ io.on('connection', socket => {
 
 app.use(pages)
 
-server.listen(port)
+server.listen(3000)
 
 module.exports = app

@@ -3,7 +3,6 @@ const handlebars = require('express-handlebars')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
-const { v4: uuidv4 } = require('uuid')
 const { pages } = require('./routes')
 const users = {}
 const port = process.env.PORT || 3000
@@ -16,7 +15,6 @@ const options = {
 
 https.createServer(options).listen(443)
 
-
 app.engine('hbs', handlebars({ extname: '.hbs' }))
 
 app.set('view engine', 'hbs')
@@ -24,7 +22,6 @@ app.use(express.urlencoded({ extended: true }))
 
 // app.set('view engine', 'ejs')
 app.use(express.static('public'))
-
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId, userName) => { // 有其他人加入房間時，傳入roomId和userId
@@ -42,7 +39,7 @@ io.on('connection', socket => {
     })
 
     // 以下用來比較
-    // socket.on('messages', message => { 
+    // socket.on('messages', message => {
     //   io.to(roomId).emit('createMessage', message)
     // })
     socket.on('disconnect', () => { // 當有人離開房間時
@@ -54,6 +51,6 @@ io.on('connection', socket => {
 
 app.use(pages)
 
-server.listen(3000)
+server.listen(port)
 
 module.exports = app

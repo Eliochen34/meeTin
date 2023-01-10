@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require('uuid')
 
-
 const roomController = {
   getRoomId: (req, res, next) => {
     res.redirect(`/${uuidv4()}`)
@@ -10,7 +9,7 @@ const roomController = {
   },
   getRooms: (req, res) => {
     res.render('rooms')
-  } 
+  }
 }
 
 module.exports = roomController

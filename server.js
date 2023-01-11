@@ -1,11 +1,23 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const express = require('express')
 const handlebars = require('express-handlebars')
+const flash = require('connect-flash')
+const methodOverride = require('method-override')
+const session = require('express-session')
+const passport = require('./config/passport')
+const { getUser } = require('./helpers/auth-helper')
+
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { pages } = require('./routes')
 const users = {}
+
 const port = process.env.PORT || 3000
+const SESSION_SECRET = 'secret'
 const https = require('https')
 const fs = require('fs')
 const options = {
@@ -19,9 +31,13 @@ app.engine('hbs', handlebars({ extname: '.hbs' }))
 
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
-
-// app.set('view engine', 'ejs')
+app.use(express.json())
 app.use(express.static('public'))
+app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
+app.use(methodOverride('_method'))
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId, userName) => { // 有其他人加入房間時，傳入roomId和userId
@@ -47,6 +63,13 @@ io.on('connection', socket => {
       delete users[socket.id]
     })
   })
+})
+
+app.use((req, res, next) => {
+  res.locals.success_message = req.flash('success_message')
+  res.locals.error_message = req.flash('error_message')
+  res.locals.user = getUser(req)
+  next()
 })
 
 app.use(pages)

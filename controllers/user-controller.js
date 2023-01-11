@@ -28,8 +28,9 @@ const userController = {
   getLoginPage: (req, res) => {
     res.render('login')
   },
-  login: (req, res) => {
-
+  login: (req, res, next) => {
+    req.flash('success_messages', 'Login Successfully!')
+    res.redirect('/rooms')
   }
 }
 

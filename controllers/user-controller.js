@@ -19,7 +19,7 @@ const userController = {
         password: hash
       }))
       .then(() => {
-        req.flash('success_message', 'Register Successfully!')
+        req.flash('success_messages', 'Register Successfully!')
         res.redirect('login')
       })
       .catch(err => next(err))

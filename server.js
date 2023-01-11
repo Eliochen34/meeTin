@@ -28,11 +28,12 @@ const options = {
 https.createServer(options).listen(443)
 
 app.engine('hbs', handlebars({ extname: '.hbs' }))
-
 app.set('view engine', 'hbs')
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static('public'))
+
 app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -66,8 +67,8 @@ io.on('connection', socket => {
 })
 
 app.use((req, res, next) => {
-  res.locals.success_message = req.flash('success_message')
-  res.locals.error_message = req.flash('error_message')
+  res.locals.success_messages = req.flash('success_messages')
+  res.locals.error_messages = req.flash('error_messages')
   res.locals.user = getUser(req)
   next()
 })

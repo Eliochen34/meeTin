@@ -13,6 +13,8 @@ router.get('/login', userController.getLoginPage)
 router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), userController.login)
 
 router.get('/rooms', roomController.getRooms)
+router.get('/rooms/new', roomController.getNewRoomPage)
+router.post('/rooms', roomController.addNewRoom)
 router.get('/:roomId', roomController.getIntoRoom)
 router.get('/', roomController.getRoomId)
 router.use('/', generalErrorHandler)

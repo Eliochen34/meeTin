@@ -28,18 +28,13 @@
         </p>
         <span class="badge bg-secondary">{{this.Category.name}}</span>
         <p class="card-text text-truncate">{{this.content}}</p>
+        <p class="card-text text-truncate">{{this.startDateTime}}</p>
         <div class="d-flex">
-          {{#if isFavorited}}
-          <form action="/favorite/{{this.id}}?_method=DELETE" method="POST">
-            <button type="submit" class="btn btn-danger m-1">移除最愛</button>
-          </form>
-          {{else}}
-          <form action="/favorite/{{this.id}}" method="POST">
-            <button type="submit" class="btn btn-primary m-1">加到最愛</button>
-          </form>
-          {{/if}}
+        <form action="/rooms/{{this.id}}" method="GET">
+          <button type="submit" class="btn btn-info m-1">Enter</button>
+        </form>
 
-          {{#if isLiked}}
+          {{!-- {{#if isLiked}}
           <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: contents;">
             <button type="submit" class="btn btn-danger m-1">Unlike</button>
           </form>
@@ -47,7 +42,7 @@
           <form action="/like/{{this.id}}" method="POST" style="display: contents;">
             <button type="submit" class="btn btn-primary m-1">Like</button>
           </form>
-          {{/if}}
+          {{/if}} --}}
         </div>
       </div>
     </div>

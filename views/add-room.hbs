@@ -1,18 +1,18 @@
-<form action="/rooms" method="POST" enctype="multipart/form-data">
+<form action="/rooms" method="POST">
   <div class="mb-4 text-center">
     <h1 class="h3 font-weight-normal mb-3">Create A New Meeting Room</h1>
   </div>
   <div class="form-row mb-3">
     <label class="form-label" for="title">Title</label>
-    <input class="form-control" type="text" name="title" id="title" placeholder="Enter title" value="{{room.title}}"
+    <input class="form-control" type="text" name="title" id="title" placeholder="Enter title"
       required>
   </div>
   
   <div class="form-row mb-3">
     <label class="form-label" for="content">Content</label>
-    <textarea class="form-control" id="content" name="content" rows="3">{{room.content}}</textarea>
+    <textarea class="form-control" type="text" id="content" name="content" rows="3"></textarea>
   </div>
   
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">Add</button>
   <a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
 </form>

@@ -1,69 +1,80 @@
-{{!-- ./views/index.handlebars --}}
-<div class="container mt-5">
-  <!-- search bar -->
-  <div class="container search-bar">
-    <div class="search-bar-outer d-flex justify-content-between">
-      <div class="search-bar-inner">
-        <form action="/search">
-          <h4 class="mb-2">尋找餐廳：</h4>
-          <div class="input-group">
-            <input type="text" value="{{keyword}}" name="keyword" class="form-control" placeholder="輸入餐廳、分類"
-              aria-label="Restaurant Name..." value="" aria-describedby="search-button">
-            <div class="input-group-append">
-              <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
-            </div>
-          </div>
-        </form>
-      </div>
-      {{!-- sorting drop down --}}
-      <div class="form-group">
-        <form action="/">
-          <select name="sort" id="sort" oninput="form.submit()" class="btn btn-secondary dropdown-toggle">
-            <option value="0">Sort</option>
-            <option value="1">A->Z</option>
-            <option value="2">Z->A</option>
-            <option value="3">類別</option>
-            <option value="4">地區</option>
-          </select>
-        </form>
-      </div>
-    </div>
-  </div>
+{{!-- {{> restaurant-tabs route='index'}}
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond '' categoryId}}active{{/ifCond}}" href="?categoryId=">全部</a>
+  </li>
+  {{!-- {{#each categories}} --}}
+  {{!-- <li class="nav-item">
+    <a class="nav-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}"
+      href="?categoryId={{this.id}}">{{this.name}}</a>
+  </li>
+  {{/each}} --}}
+{{!-- </ul> --}}
 
-  <!-- restaurant list -->
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-10 col-12 mx-auto">
-        <a href="/rooms/new"> <button class="btn btn-info mb-3">建立會議室</button> </a>
-        <div class="card-columns">
-          {{#each rooms}}
-          <div class="mb-1">
-            <a href="/restaurants/{{this._id}}" class="text-secondary">
-              <div class="card mb-1">
-                <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
-                <div class="card-body p-3">
-                  <h6 class="card-title mb-1">{{this.name}}</h6>
-                  <div class="restaurant-category mb-1">
-                    <i class="fas fa-utensils pr-2"></i> {{this.category}}
-                  </div>
-                  <span class="badge badge-pill badge-danger font-weight-normal">
-                    {{this.rating}}
-                    <i class="fas fa-star fa-xs"></i>
-                  </span>
-                </div>
-                <div class="card-footer d-flex justify-content-end flex-wrap">
-                  <a href="/restaurants/{{ this._id }}/edit" class="btn btn-info">Edit</a>
-                  <a href="/restaurants/{{ this._id }}" class="btn btn-primary">Detail</a>
-                  <form action="/restaurants/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                  </form>
-                </div>
-              </div>
-            </a>
-          </div>
-          {{/each}}
+<div class="row mt-3">
+  <a href="/rooms/new"><button class="btn btn-primary mb-3">新增會議室</button></a>
+  {{#each rooms}}
+  <div class="col-md-4">
+    <div class="card mb-4 shadow-sm">
+      <a href="/restaurants/{{this.id}}">
+        <img class="card-img-top img-fluid" src="{{this.image}}" alt="Card image cap" width="286px" height="180px"
+          style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
+      </a>
+      <div class="card-body">
+        <p class="card-text">
+          <a href="/restaurants/{{this.id}}">
+            {{this.title}}
+          </a>
+        </p>
+        <span class="badge bg-secondary">{{this.Category.name}}</span>
+        <p class="card-text text-truncate">{{this.content}}</p>
+        <div class="d-flex">
+          {{#if isFavorited}}
+          <form action="/favorite/{{this.id}}?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-danger m-1">移除最愛</button>
+          </form>
+          {{else}}
+          <form action="/favorite/{{this.id}}" method="POST">
+            <button type="submit" class="btn btn-primary m-1">加到最愛</button>
+          </form>
+          {{/if}}
+
+          {{#if isLiked}}
+          <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: contents;">
+            <button type="submit" class="btn btn-danger m-1">Unlike</button>
+          </form>
+          {{else}}
+          <form action="/like/{{this.id}}" method="POST" style="display: contents;">
+            <button type="submit" class="btn btn-primary m-1">Like</button>
+          </form>
+          {{/if}}
         </div>
       </div>
     </div>
   </div>
+  {{/each}}
 </div>
+
+{{!-- <nav class="mt-3" aria-label="page navigation">
+  <ul class="pagination">
+    <li class="page-item {{#ifCond pagination.currentPage 1}}disabled{{/ifCond}}">
+      <a class="page-link" href="/restaurants?page={{pagination.prev}}&categoryId={{categoryId}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {{#each pagination.pages}}
+    {{#ifCond this ../pagination.currentPage}}
+    <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
+    {{else}}
+    <li class="page-item">
+      <a class="page-link" href="/restaurants?page={{this}}&categoryId={{../categoryId}}">{{this}}</a>
+    </li>
+    {{/ifCond}}
+    {{/each}}
+    <li class="page-item {{#ifCond pagination.currentPage pagination.totalPage}}disabled{{/ifCond}}">
+      <a class="page-link" href="/restaurants?page={{pagination.next}}&categoryId={{categoryId}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav> --}}

@@ -6,7 +6,13 @@ const roomController = {
     res.redirect(`/${uuidv4()}`)
   },
   getIntoRoom: (req, res, next) => {
-    res.render('room', { roomId: req.params.room })
+    return Room.findByPk(req.params.roomId, { raw: true })
+      .then(room => {
+        // console.log(room)
+        if (!room) throw new Error("Room didn't exist!")
+        res.render('room', { roomId: req.params.roomId })
+      })
+      .catch(err => next(err))
   },
   getRooms: (req, res, next) => {
     Room.findAll({ raw: true })

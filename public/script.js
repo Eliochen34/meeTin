@@ -11,11 +11,10 @@ const peers = {}
 const messageForm = document.getElementById('main__message__container')
 const messageShow = document.getElementById('messages')
 const messageInput = document.getElementById('message-input')
-// const userName = prompt('What is your name?')
-
+const userName = prompt('What is your name?')
 // appendMessage('You joined')
 
-navigator.mediaDevices.getUserMedia({ // 取得影像做為streamffasdf傳入下一個then
+navigator.mediaDevices.getUserMedia({ // 取得影像做為stream傳入下一個then
   video: true,
   audio: true
 }).then(stream => {

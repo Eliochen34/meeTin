@@ -31,6 +31,9 @@ const userController = {
   login: (req, res, next) => {
     req.flash('success_messages', 'Login Successfully!')
     res.redirect('/rooms')
+  },
+  logout: (req, res) => {
+    res.redirect('/login')
   }
 }
 

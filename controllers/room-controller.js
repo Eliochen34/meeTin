@@ -8,8 +8,8 @@ const roomController = {
   getIntoRoom: (req, res, next) => {
     return Room.findByPk(req.params.roomId, { raw: true })
       .then(room => {
-        // console.log(room)
-        if (!room) throw new Error("Room didn't exist!")
+        console.log(room)
+        // if (!room) throw new Error("Room didn't exist!")
         res.render('room', { roomId: req.params.roomId })
       })
       .catch(err => next(err))

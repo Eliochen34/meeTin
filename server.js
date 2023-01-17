@@ -18,14 +18,14 @@ const users = {}
 
 const port = process.env.PORT || 3000
 const SESSION_SECRET = 'secret'
-const https = require('https')
-const fs = require('fs')
-const options = {
-  key: fs.readFileSync('./private.key'),
-  cert: fs.readFileSync('./certificate.crt')
-}
+// const https = require('https')
+// const fs = require('fs')
+// const options = {
+//   key: fs.readFileSync('./private.key'),
+//   cert: fs.readFileSync('./certificate.crt')
+// }
 
-https.createServer(options).listen(443)
+// https.createServer(options).listen(443)
 
 app.engine('hbs', handlebars({ extname: '.hbs' }))
 app.set('view engine', 'hbs')
